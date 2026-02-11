@@ -1803,67 +1803,6 @@ jobs:
           
           echo "::endgroup::"
 
-      - name: 🕊️ Dave Täht Tribute & CAKE Patch
-        run: |
-          # =======================================================
-          # 🕊️ In Memory of Dave Täht
-          # -------------------------------------------------------
-          # 🇹🇼：靈魂永駐，精神長存
-          # 🇺🇸：May his soul find eternal peace, and his spirit live on forever.
-          #
-          # 📢 SLOGAN: When you miss Dave, modprobe sch_cake!
-          # =======================================================
-          
-          echo "::group::Applying CAKE to Kernel 3.4 Config"
-          
-          TARGET_BOARD="${{ inputs.target_select }}"
-          BOARDS_DIR="/opt/padavan-ng/trunk/configs/boards"
-          
-          # 3.4 內核的目錄結構較深 (例如 boards/ASUS/RT-N56U)，使用 find 尋找
-          echo "🔍 Searching for config file for board: $TARGET_BOARD..."
-          CONFIG_PATH=$(find "$BOARDS_DIR" -name "kernel-3.4.x.config" | grep "/$TARGET_BOARD/" | head -n 1)
-
-          if [ -z "$CONFIG_PATH" ]; then
-             echo "⚠️  Direct match not found, trying loose search..."
-             # 備用搜尋：有些機型目錄可能不完全等於 target_select (雖然很少見)
-             CONFIG_PATH=$(find "$BOARDS_DIR" -type f -name "kernel-3.4.x.config" | grep "$TARGET_BOARD" | head -n 1)
-          fi
-
-          if [ -f "$CONFIG_PATH" ]; then
-            echo "🎯 Found Config: $CONFIG_PATH"
-            
-            # 檢查是否已經存在 CAKE 設定
-            if grep -q "CONFIG_NET_SCH_CAKE" "$CONFIG_PATH"; then
-              echo "⚠️ CAKE module is already enabled in config."
-            else
-              echo "🔧 Injecting CAKE module..."
-              
-              # 在 FQ_CODEL 之後插入 CAKE
-              if grep -q "CONFIG_NET_SCH_FQ_CODEL=m" "$CONFIG_PATH"; then
-                sed -i '/CONFIG_NET_SCH_FQ_CODEL=m/a CONFIG_NET_SCH_CAKE=m' "$CONFIG_PATH"
-                echo "✅ Inserted CAKE after FQ_CODEL."
-              else
-                # 若找不到 FQ_CODEL，則附加在檔案末尾
-                echo "CONFIG_NET_SCH_CAKE=m" >> "$CONFIG_PATH"
-                echo "✅ Appended CAKE to end of file."
-              fi
-            fi
-            
-            # 再次驗證
-            if grep -q "CONFIG_NET_SCH_CAKE=m" "$CONFIG_PATH"; then
-               echo "🎉 CAKE Patch Applied Successfully!"
-               echo "📢 Reminder: When you miss Dave, modprobe sch_cake!"
-            else
-               echo "❌ Error: Failed to apply CAKE patch."
-               exit 1
-            fi
-          else
-            echo "❌ Config file not found for $TARGET_BOARD"
-            echo "   Please check if the board exists in trunk/configs/boards/"
-            exit 1
-          fi
-          echo "::endgroup::"
-            
       - name: 🌐 Custom Language Selector
         run: |
           echo "::group::Setting up WebUI Language"
@@ -1930,6 +1869,66 @@ jobs:
           fi
           echo "::endgroup::"
       
+      - name: 🕊️ Dave Täht Tribute & CAKE Patch
+        run: |
+          # =======================================================
+          # 🕊️ In Memory of Dave Täht
+          # -------------------------------------------------------
+          # 🇹🇼：靈魂永駐，精神長存
+          # 🇺🇸：May his soul find eternal peace, and his spirit live on forever.
+          #
+          # 📢 SLOGAN: When you miss Dave, modprobe sch_cake!
+          # =======================================================
+          
+          echo "::group::Applying CAKE to Kernel 3.4 Config"
+          
+          TARGET_BOARD="${{ inputs.target_select }}"
+          BOARDS_DIR="/opt/padavan-ng/trunk/configs/boards"
+          
+          # 3.4 內核的目錄結構較深 (例如 boards/ASUS/RT-N56U)，使用 find 尋找
+          echo "🔍 Searching for config file for board: $TARGET_BOARD..."
+          CONFIG_PATH=$(find "$BOARDS_DIR" -name "kernel-3.4.x.config" | grep "/$TARGET_BOARD/" | head -n 1)
+
+          if [ -z "$CONFIG_PATH" ]; then
+             echo "⚠️  Direct match not found, trying loose search..."
+             # 備用搜尋：有些機型目錄可能不完全等於 target_select (雖然很少見)
+             CONFIG_PATH=$(find "$BOARDS_DIR" -type f -name "kernel-3.4.x.config" | grep "$TARGET_BOARD" | head -n 1)
+          fi
+
+          if [ -f "$CONFIG_PATH" ]; then
+            echo "🎯 Found Config: $CONFIG_PATH"
+            
+            # 檢查是否已經存在 CAKE 設定
+            if grep -q "CONFIG_NET_SCH_CAKE" "$CONFIG_PATH"; then
+              echo "⚠️ CAKE module is already enabled in config."
+            else
+              echo "🔧 Injecting CAKE module..."
+              
+              # 在 FQ_CODEL 之後插入 CAKE
+              if grep -q "CONFIG_NET_SCH_FQ_CODEL=m" "$CONFIG_PATH"; then
+                sed -i '/CONFIG_NET_SCH_FQ_CODEL=m/a CONFIG_NET_SCH_CAKE=m' "$CONFIG_PATH"
+                echo "✅ Inserted CAKE after FQ_CODEL."
+              else
+                # 若找不到 FQ_CODEL，則附加在檔案末尾
+                echo "CONFIG_NET_SCH_CAKE=m" >> "$CONFIG_PATH"
+                echo "✅ Appended CAKE to end of file."
+              fi
+            fi
+            
+            # 再次驗證
+            if grep -q "CONFIG_NET_SCH_CAKE=m" "$CONFIG_PATH"; then
+               echo "🎉 CAKE Patch Applied Successfully!"
+               echo "📢 Reminder: When you miss Dave, modprobe sch_cake!"
+            else
+               echo "❌ Error: Failed to apply CAKE patch."
+               exit 1
+            fi
+          else
+            echo "❌ Config file not found for $TARGET_BOARD"
+            echo "   Please check if the board exists in trunk/configs/boards/"
+            exit 1
+          fi
+          echo "::endgroup::"
       
       # 8. 開始編譯
       - name: Build firmware
