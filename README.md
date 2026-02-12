@@ -116,16 +116,44 @@ This repository automates the building of **Padavan 3.4 ng** firmware. It empowe
 
 ## 🚀 Supported Devices (Kernel 3.4)
 
-We support a vast array of **MT7620/MT7621** devices. Pick the one you love!
+We support a massive array of **MT7620/MT7621** devices. Pick the one you love!
+*(This list corresponds directly to the `target_select` menu in the build workflow.)*
 
-| Brand | Models (Examples) |
+| Brand | Supported Models |
 | :--- | :--- |
-| **Xiaomi** | MI-3, MI-4, MI-MINI, MI-NANO, MI-R3G (v1/v2), R2100 |
-| **ASUS** | RT-N56U, RT-N14U, RT-AC1200, RT-AC51U, RT-N11P |
-| **TP-Link** | TL-WR840N/841N (multiple versions), TL-C20, TL-C50, TL-MR series |
-| **ZyXEL** | Keenetic series (Giga III, Ultra II, Extra, Lite, Omni, Viva) |
-| **D-Link** | DIR-882, DIR-878, DIR-860L, DIR-620 |
-| **And many more** | Newifi, Phicomm, Totolink, Belkin, GL.iNet, HiWiFi, Linksys, ZTE... |
+| **TP-Link** | **Archer C2 (V1)**, C20 (V1/V4/V5), C5 (V4), C50 (V1/V3/V4), EC220-G5 (V2), MR200 (V1), MR3020 (V3), MR3420 (V5), WDR7300 (V5), WR840N (V4/V5/V6/RU), WR841N (V13/V14), WR842N (V5), WR845N (V3/V4) |
+| **Xiaomi** | MI-3, MI-3C, MI-4 (A/C/SPI), MI-4A (100M), MI-MINI, MI-NANO, MI-R3G (v1/v2/SPI), MI-R3P (Pro), R2100 (AC2100), RM-AC2100 |
+| **ASUS** | RT-AC1200 (GU/HP), RT-AC51U, RT-AC54U, RT-N10+, RT-N11P (B1), RT-N12+, RT-N13U (B1), RT-N14U, **RT-N56U (A1/B1/GE2)**, RP-AC56 |
+| **ZyXEL** | Keenetic Series: **Giga III**, **Ultra II**, Extra (I/II), Lite (I/II/III/3B), Omni (I/II), Start II, Viva, 4G III (B) |
+| **D-Link** | DIR-300 (B1/B7), DIR-320 (B1), DIR-620 (A1/D1), DIR-860L, **DIR-882** |
+| **Newifi** | Newifi D1, Newifi D2, Newifi Mini, Newifi Y1S |
+| **GL.iNet** | GL-MT300A, GL-MT300N (V1/V2) |
+| **Phicomm** | K2P (PSG1218), 256PSG1218 |
+| **ZBT** | WE1326, WE1626, WE826-T2, WG3526 (-32), WR8305RT |
+| **Others** | **Ubiquiti** ER-X, **Linksys** EA-8100, **Belkin** F9K1103, **Totolink** A3004NS, **HiWiFi** HC5661A, **Youku** L1/L1C, **ZTE** E8820S |
+| **OEM/Misc** | 5K-W20, A5-V11, ALR-U270, MQ-WITI, Nexx WT3020 (A/H), Samsung SWR1100, Sercomm (S1010/SmartBox), SNR (MD1/ME1/W4N), Tuoshi TS7620N, Unielec U7621, Wall-AP, Youhua WR1200JS |
+
+---
+
+## 🌐 Multi-Language Support
+
+We believe in a borderless internet. The firmware now supports **14 Languages** out of the box!
+*(Select your preferred language in the `language_select` menu.)*
+
+* **English_Only** (Default)
+* **CN (繁體中文)** - Traditional Chinese
+* **RU (Pусский)** - Russian
+* **ES (Español)** - Spanish
+* **BR (Brazil)** - Portuguese
+* **CZ (Česky)** - Czech
+* **DA (Dansk)** - Danish
+* **DE (Deutsch)** - German
+* **FI (Finsk)** - Finnish
+* **FR (Français)** - French
+* **NO (Norsk)** - Norwegian
+* **PL (Polski)** - Polish
+* **SV (Svensk)** - Swedish
+* **UK (Українська)** - Ukrainian
 
 ---
 
