@@ -1810,7 +1810,7 @@ jobs:
           # 1. 取得使用者選擇與目標機型
           SELECTED_LANG_OPTION="${{ inputs.language_select }}"
           TARGET_BOARD="${{ inputs.target_select }}"
-          TEMPLATES_DIR="/opt/padavan-ng/trunk/configs/templates"
+          TEMPLATES_DIR="padavan-ng/trunk/configs/templates"
           
           # 解析語言代碼 (例如 "CN (繁體中文)" -> "CN")
           if [ "$SELECTED_LANG_OPTION" == "English_Only" ]; then
@@ -1883,7 +1883,7 @@ jobs:
           echo "::group::Applying CAKE to Kernel 3.4 Config"
           
           TARGET_BOARD="${{ inputs.target_select }}"
-          BOARDS_DIR="/opt/padavan-ng/trunk/configs/boards"
+          BOARDS_DIR="padavan-ng/trunk/configs/boards"
           
           # 3.4 內核的目錄結構較深 (例如 boards/ASUS/RT-N56U)，使用 find 尋找
           echo "🔍 Searching for config file for board: $TARGET_BOARD..."
