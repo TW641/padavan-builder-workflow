@@ -378,11 +378,17 @@ jobs:
       # 5. 應用自定義設定 (JSON)
       - name: Apply Custom Settings
         run: |
-          echo "::group::JSON Parsing"
+          echo "::group::JSON Parsing & Export"
+          
+          # 檢查 JSON 格式是否有效
+          jq empty <<< '${{ inputs.customization }}' || { echo "❌ Invalid JSON"; exit 1; }
+          
+          # 1. 寫入 GITHUB_ENV，確保最後 Release 步驟可以讀取到這些變數！
           echo '${{ inputs.customization }}' | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while IFS='=' read -r k v; do
-            export "${k^^}=$v"
+            echo "${k^^}=$v" >> $GITHUB_ENV  
           done
           
+          # 2. 提取局部變數，供當前執行腳本使用
           LANIP=$(echo '${{ inputs.customization }}' | jq -r .lanip)
           SIGNACCOUNT=$(echo '${{ inputs.customization }}' | jq -r .signaccount)
           SIGNPASSWORD=$(echo '${{ inputs.customization }}' | jq -r .signpassword)
@@ -391,8 +397,7 @@ jobs:
           WIFI5GSSID=$(echo '${{ inputs.customization }}' | jq -r .wifi5gssid)
           WIFI5GPSK=$(echo '${{ inputs.customization }}' | jq -r .wifi5gpsk)
           
-          export LANIP SIGNACCOUNT SIGNPASSWORD WIFI2GSSID WIFI2GPSK WIFI5GSSID WIFI5GPSK
-          
+          # 3. 執行自定義腳本 (Padavan-ng 路徑)
           if [ -d "padavan-ng/trunk/custom/scripts" ]; then
             cd padavan-ng
             chmod +x trunk/custom/scripts/*.sh
@@ -1807,24 +1812,22 @@ jobs:
         run: |
           echo "::group::Setting up WebUI Language"
           
-          # 1. 取得使用者選擇與目標機型
           SELECTED_LANG_OPTION="${{ inputs.language_select }}"
           TARGET_BOARD="${{ inputs.target_select }}"
           TEMPLATES_DIR="padavan-ng/trunk/configs/templates"
           
-          # 解析語言代碼 (例如 "CN (繁體中文)" -> "CN")
+          # 判斷並匯出 Release 用語言標籤變數
           if [ "$SELECTED_LANG_OPTION" == "English_Only" ]; then
             LANG_CODE="NONE"
+            echo "RELEASE_LANG=English Only" >> $GITHUB_ENV
           else
             LANG_CODE=$(echo "$SELECTED_LANG_OPTION" | cut -d' ' -f1)
+            echo "RELEASE_LANG=English + $SELECTED_LANG_OPTION" >> $GITHUB_ENV
           fi
           
           echo "🎯 Target Board: $TARGET_BOARD"
           echo "🗣️ Selected Language Code: $LANG_CODE"
           
-          # 2. 搜尋該機型的 Template Config 檔案
-          # Padavan-ng 的結構通常是 trunk/configs/templates/xxx.config
-          # 有些在子目錄，所以用 find 搜尋
           CONFIG_PATH=$(find "$TEMPLATES_DIR" -type f -name "*.config" | grep -i "$TARGET_BOARD.config" | head -n 1)
           
           if [ -z "$CONFIG_PATH" ]; then
@@ -1834,24 +1837,15 @@ jobs:
           
           if [ -f "$CONFIG_PATH" ]; then
             echo "📝 Modifying Config: $CONFIG_PATH"
-            
-            # 3. 第一步：先停用所有非英文語言 (Reset to English Only)
-            # 邏輯：找到所有開頭為 CONFIG_FIRMWARE_INCLUDE_LANG_ 且設為 y 的行，在前面加上 #
             sed -i 's/^CONFIG_FIRMWARE_INCLUDE_LANG_.*=y/#&/' "$CONFIG_PATH"
             echo "✅ All non-English languages disabled."
             
-            # 4. 第二步：如果不是選 English_Only，則啟用指定語言
             if [ "$LANG_CODE" != "NONE" ]; then
               TARGET_LANG_CONFIG="CONFIG_FIRMWARE_INCLUDE_LANG_$LANG_CODE"
-              
-              # 檢查檔案內是否有該設定 (無論是被註解還是未註解)
               if grep -q "$TARGET_LANG_CONFIG" "$CONFIG_PATH"; then
-                # 如果存在 (被註解掉的 #CONFIG...=y 或 CONFIG...=n)，用 sed 替換成啟用
-                # 這裡使用 regex 確保取代掉整行
                 sed -i "s/^.*$TARGET_LANG_CONFIG.*/$TARGET_LANG_CONFIG=y/" "$CONFIG_PATH"
                 echo "✅ Enabled language: $LANG_CODE"
               else
-                # 如果完全不存在該行，則附加到檔案最後
                 echo "$TARGET_LANG_CONFIG=y" >> "$CONFIG_PATH"
                 echo "✅ Appended language config: $LANG_CODE"
               fi
@@ -1859,12 +1853,11 @@ jobs:
               echo "ℹ️ Keeping English Only."
             fi
             
-            # 驗證結果 (列出目前啟用的語言)
             echo "🔍 Current Enabled Languages in Config:"
             grep "^CONFIG_FIRMWARE_INCLUDE_LANG_" "$CONFIG_PATH" || echo "(None - English Only)"
-            
           else
             echo "❌ Error: Could not find template config for $TARGET_BOARD"
+            echo "   Please check inputs.target_select matches the filename in trunk/configs/templates/"
             exit 1
           fi
           echo "::endgroup::"
@@ -2169,6 +2162,7 @@ jobs:
             * **Branch**: ${{ env.PADAVAN_BRANCH }}
             * **Commit**: ${{ env.PADAVAN_COMMIT }}
             * **選擇機型**: ${{ inputs.target_select }}
+            * **WebUI 語言選項 (Custom Language Select)**: ${{ env.RELEASE_LANG }}
             * **編譯時間**: ${{ env.BUILD_TIME }} (Taipei Time)
             * **LAN IP**: ${{ env.LANIP }}
             * **User**: ${{ env.SIGNACCOUNT }} / **Pass**: ${{ env.SIGNPASSWORD }}
