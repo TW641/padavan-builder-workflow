@@ -257,7 +257,7 @@ jobs:
             . variables
           fi
           
-          echo "PADAVAN_REPO=https://github.com/TWShiyuLiou1997/padavan-ng" >> $GITHUB_ENV
+          echo "PADAVAN_REPO=https://github.com/TW641/padavan-ng" >> $GITHUB_ENV
           echo "PADAVAN_BRANCH=master" >> $GITHUB_ENV
           echo "PADAVAN_COMMIT=HEAD" >> $GITHUB_ENV
           
@@ -2151,9 +2151,26 @@ jobs:
           tag: ${{ env.TAG_NAME }}
           name: ${{ inputs.target_select }} [${{ env.BUILD_TIMESTAMP }}]
           body: |
-            **Padavan 編譯報告 (Early Check)**
-            * **機型**: ${{ inputs.target_select }}
-            * **時間**: ${{ env.BUILD_TIME }} (Taipei Time)
+            **Padavan 編譯報告 - Build firmware (Ultimate Fix - Early Size Check)**
+            * **🇹🇼 TW641 Padavan CAKE🍰OpenWrt 25.12 Dave's Guitar🎸開源路由器韌體 與 Dave Täht數位典藏博物館🏛️**: https://TW641.github.io/
+            * **Linux Kernel**: **3.4.113**，大幅領先原廠舊核心。
+            * **專案版本**: Padavan ng CAKE Linux 3.4 (The Dave Täht Tribute Edition) - TW641 的開源專案 | TW641 Padavan CAKE 與 Dave Täht 數位典藏博物館
+            * **專案介紹**: https://TW641.github.io/padavan-ng/
+            * **🕊️ In Memory of Dave Täht**
+            * **📢 SLOGAN: "The darker the night, the brighter the Täht."**
+            * **📢 Reminder: "When you miss Dave, modprobe sch_cake!"**
+            * **效能解放**：全系列整合 CAKE 流量調度、HWNAT (硬體加速) + SFE (軟體加速)。
+            * **介面優化**：內建繁體中文，並針對 1080P 寬螢幕進行排版優化。
+            * **穩定提升**：修復 MT7610E 無線驅動斷線問題，啟用快速重連；3.4 版本採用最穩定的 iproute2-5.12.0 TC + iproute2-5.12.0 IP + Iptables 1.8.11 + 套用 Upstream Patches 與 libmnl 1.0.5 組合，新增 Arptables v0.0.5。
+            * **安全防護**：全面升級 Busybox 1.37.0，修復多個 CVE 高風險漏洞（[SECURITY] CVE-2025-60876 & CVE-2025-46394）。
+            * **padavan-builder-workflow CI YAML自動化雲端編譯韌體腳本來源**: https://github.com/TW641/padavan-builder-workflow/blob/main/.github/workflows/build.yml
+            * **padavan-builder-workflow CI YAML自動化雲端編譯韌體腳本介紹**: https://TW641.github.io/padavan-builder-workflow/
+            * **原始碼來源 Repo**: ${{ env.PADAVAN_REPO }}
+            * **Branch**: ${{ env.PADAVAN_BRANCH }}
+            * **Commit**: ${{ env.PADAVAN_COMMIT }}
+            * **選擇機型**: ${{ inputs.target_select }}
+            * **編譯時間**: ${{ env.BUILD_TIME }} (Taipei Time)
+            * **LAN IP**: ${{ env.LANIP }}
             * **User**: ${{ env.SIGNACCOUNT }} / **Pass**: ${{ env.SIGNPASSWORD }}
             * **WiFi**: ${{ env.WIFI2GSSID }} / ${{ env.WIFI5GSSID }}
             
