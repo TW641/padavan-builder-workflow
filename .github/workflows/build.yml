@@ -2158,7 +2158,7 @@ jobs:
             * **安全防護**：全面升級 Busybox 1.37.0，修復多個 CVE 高風險漏洞（[SECURITY] CVE-2025-60876 & CVE-2025-46394）。
             * **padavan-builder-workflow CI YAML自動化雲端編譯韌體腳本來源**: https://github.com/TW641/padavan-builder-workflow/blob/main/.github/workflows/build.yml
             * **padavan-builder-workflow CI YAML自動化雲端編譯韌體腳本介紹**: https://TW641.github.io/padavan-builder-workflow/
-            * **原始碼來源 Repo**: ${{ env.PADAVAN_REPO }}
+            * **原始碼來源 Repo**: https://github.com/TW641/padavan-ng
             * **Branch**: ${{ env.PADAVAN_BRANCH }}
             * **Commit**: ${{ env.PADAVAN_COMMIT }}
             * **選擇機型**: ${{ inputs.target_select }}
